@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='our-space'
+rootProject.name='loginTemplate'
