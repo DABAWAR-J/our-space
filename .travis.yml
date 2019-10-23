@@ -19,15 +19,7 @@ android:
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
-    - addon-google_apis-google-$ANDROID_API_LEVEL
-
-licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-
-before_install:
-    - yes | sdkmanager "platforms;android-29"    
+    - addon-google_apis-google-$ANDROID_API_LEVEL 
     
 before_script:
     - mkdir -p "$ANDROID_HOME/licenses"
