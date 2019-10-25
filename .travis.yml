@@ -30,7 +30,7 @@ licenses:
     - 'google-gdk-license-.+'
 
 before_install:
-    - yes | sdkmanager --licenses 
+    - echo yes | sdkmanager "build-tools;29.0.4"
     
 before_script:
     - mkdir -p "$ANDROID_HOME/licenses"
