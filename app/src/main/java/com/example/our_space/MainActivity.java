@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity {
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-//        showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -124,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
 //                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -169,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-//        hideProgressDialog();
 //        if (user != null) {
 //            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
 //            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
@@ -186,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 //    @Override
-    public void onClick(View v) {
+//    public void onClick(View v) {
 //        int i = v.getId();
 //        if (i == R.id.signInButton) {
 //            signIn();
@@ -195,5 +187,5 @@ public class MainActivity extends AppCompatActivity {
 //        } else if (i == R.id.disconnectButton) {
 //            revokeAccess();
 //        }
-    }
+//    }
 }
