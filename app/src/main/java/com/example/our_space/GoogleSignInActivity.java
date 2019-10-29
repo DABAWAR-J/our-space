@@ -15,12 +15,13 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-//import com.google.firebase.quickstart.auth.R;
+import com.example.our_space.R;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -39,10 +40,16 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    public GoogleSignInActivity() {
+        super();
+        FirebaseApp.initializeApp(this);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_google);
 
         // Views
         mStatusTextView = findViewById(R.id.status);
