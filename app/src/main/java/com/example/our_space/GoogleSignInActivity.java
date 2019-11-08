@@ -2,8 +2,10 @@ package com.example.our_space;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -125,6 +127,14 @@ public class GoogleSignInActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if(!user.getEmail().endsWith("@anderson.edu")) {
+                                Toast toast = new Toast(getApplicationContext());
+                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast.setDuration(Toast.LENGTH_LONG);
+                                toast.setView(findViewById(R.id.status));
+                                toast.show();
+                                revokeAccess();
+                            }
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
