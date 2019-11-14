@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -135,14 +136,14 @@ public class MainActivity extends AppCompatActivity {
         // [END fcm_remove_from_group]
     }
 
-    public void sendUpstream() {
+    public void sendUpstream(String message) {
         final String SENDER_ID = "YOUR_SENDER_ID";
         final int messageId = 0; // Increment for each
         // [START fcm_send_upstream]
         FirebaseMessaging fm = FirebaseMessaging.getInstance();
         fm.send(new RemoteMessage.Builder(SENDER_ID + "@fcm.googleapis.com")
                 .setMessageId(Integer.toString(messageId))
-                .addData("my_message", "Hello World")
+                .addData("my_message", message)
                 .addData("my_action","SAY_HELLO")
                 .build());
         // [END fcm_send_upstream]
@@ -232,4 +233,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void sendMessage(View view) {
+        EditText editText = findViewById(R.id.enterMessage);
+        sendUpstream(editText.getText().toString());
+    }
 }
