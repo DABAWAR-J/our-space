@@ -1,19 +1,23 @@
 package com.example.our_space;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,25 +72,52 @@ public class MainActivity extends BaseActivity {
         });
 
 
-//        ValueEventListener postListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String message = (String) dataSnapshot.getValue();
-//                newMessage.setText(message);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException());
-//                // [START_EXCLUDE]
-//                Toast.makeText(MainActivity.this, "Failed to load post.",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//
-//        mDatabase.child("messages").getRef().addValueEventListener(postListener);
+        ChildEventListener postListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                String message = (String) dataSnapshot.getValue();
+                TextView newMessageView = createNewTextView();
+                newMessageView.setText(message);
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+                Toast.makeText(MainActivity.this, "Failed to load post.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        mDatabase.child("messages").getRef().addChildEventListener(postListener);
     }
+
+    public TextView createNewTextView() {
+        TextView newMessageView = new TextView(this);
+        newMessageView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout linearLayout = findViewById(R.id.mainLinearLayout);
+        linearLayout.addView(newMessageView);
+        return newMessageView;
+    }
+
 
 
 }
