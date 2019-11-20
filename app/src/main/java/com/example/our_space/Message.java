@@ -11,7 +11,6 @@ public class Message {
 
     public String uid;
     public String author;
-    public String room;
     public String body;
     public int likeCount = 0;
 
@@ -19,10 +18,9 @@ public class Message {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Message(String uid, String author, String room, String body) {
+    public Message(String uid, String author, String body) {
         this.uid = uid;
         this.author = author;
-        this.room = room;
         this.body = body;
     }
 
@@ -31,7 +29,6 @@ public class Message {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
         result.put("author", author);
-        result.put("room", room);
         result.put("body", body);
         result.put("likeCount", likeCount);
 

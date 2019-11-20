@@ -2,12 +2,10 @@ package com.example.our_space;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -22,7 +20,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,9 +36,9 @@ public class MainActivity extends BaseActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        messageField = (EditText) findViewById(R.id.messageField);
-        newMessage = (TextView) findViewById(R.id.newMessage);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        messageField = findViewById(R.id.messageField);
+        newMessage = findViewById(R.id.newMessage);
+        sendButton = findViewById(R.id.sendButton);
 
     }
 
@@ -51,7 +48,7 @@ public class MainActivity extends BaseActivity {
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String messageKey = mDatabase.child("messages").push().getKey();
+                String messageKey = mDatabase.child("users").child(getUid()).push().getKey();
                 String messageString = messageField.getText().toString();
                 mDatabase.child("messages").child(messageKey).setValue(messageString)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
