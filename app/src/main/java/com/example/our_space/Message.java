@@ -34,4 +34,8 @@ public class Message {
 
         return result;
     }
+
+    public static Message fromMap(Map<String, Object> map) {
+        return new Message((String)map.get("uid"), (String)map.get("author"), (String)map.get("body"));
+    }
 }

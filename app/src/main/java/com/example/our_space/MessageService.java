@@ -26,7 +26,7 @@ public class MessageService {
         String roomMessageRef = "/rooms/" + roomId + "/messages/";
 
         String messageKey = mDatabase.child("users").child(uid).child("messages").push().getKey();
-        Message message = new Message(uid, author, roomId, body);
+        Message message = new Message(uid, author, body);
         Map<String, Object> messageValues = message.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

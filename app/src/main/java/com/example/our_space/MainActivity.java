@@ -15,11 +15,14 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class MainActivity extends BaseActivity {
 
@@ -48,22 +51,8 @@ public class MainActivity extends BaseActivity {
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String messageKey = mDatabase.child("users").child(getUid()).push().getKey();
                 String messageString = messageField.getText().toString();
-                mDatabase.child("messages").child(messageKey).setValue(messageString)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("basicWrite","Database call was successful");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("basicWrite", e.toString());
-                                Log.e("basicWrite","Database call failed");
-                            }
-                        });
+                sendMessage(messageString);
                 messageField.setText("");
             }
         });
@@ -72,9 +61,9 @@ public class MainActivity extends BaseActivity {
         ChildEventListener postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                String message = (String) dataSnapshot.getValue();
+                Message message = Message.fromMap((HashMap<String, Object>)dataSnapshot.getValue());
                 TextView newMessageView = createNewTextView();
-                newMessageView.setText(message);
+                newMessageView.setText(message.body);
 
             }
 
@@ -103,7 +92,7 @@ public class MainActivity extends BaseActivity {
             }
         };
 
-        mDatabase.child("messages").getRef().addChildEventListener(postListener);
+        mDatabase.child("users").getRef().addChildEventListener(postListener);
     }
 
     public TextView createNewTextView() {
@@ -113,6 +102,26 @@ public class MainActivity extends BaseActivity {
         LinearLayout linearLayout = findViewById(R.id.mainLinearLayout);
         linearLayout.addView(newMessageView);
         return newMessageView;
+    }
+
+    public void sendMessage(String message) {
+        String messageKey = mDatabase.child("users").child(getUid()).push().getKey();
+        String author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Message newMessage = new Message(getUid(), author, message);
+        mDatabase.child("users").child(messageKey).setValue(newMessage.toMap())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("basicWrite","Database call was successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("basicWrite", e.toString());
+                        Log.e("basicWrite","Database call failed");
+                    }
+                });
     }
 
 
