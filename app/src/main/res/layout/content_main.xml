@@ -15,7 +15,7 @@
     tools:context=".LocationSelection"
     tools:showIn="@layout/activity_main">
 
-  <com.jaredrummler.materialspinner.MaterialSpinner
+  <com.example.materialspinner.MaterialSpinner
       android:id="@+id/spinner"
       app:ms_dropdown_max_height="350dp"
       app:ms_dropdown_height="wrap_content"
