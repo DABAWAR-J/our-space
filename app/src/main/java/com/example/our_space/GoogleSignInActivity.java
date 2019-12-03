@@ -1,4 +1,5 @@
 package com.example.our_space;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +22,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.example.our_space.R;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -98,7 +98,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, MessageActivity.class);
                 startActivity(intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately

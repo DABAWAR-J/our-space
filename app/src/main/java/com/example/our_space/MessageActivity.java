@@ -24,11 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class MainActivity extends BaseActivity {
+public class MessageActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
     private Button sendButton;
-    private TextView newMessage;
     private EditText messageField;
 
     @Override
@@ -40,7 +39,6 @@ public class MainActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         messageField = findViewById(R.id.messageField);
-        newMessage = findViewById(R.id.newMessage);
         sendButton = findViewById(R.id.sendButton);
 
     }
@@ -85,9 +83,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
-                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException());
+                Log.w("MessageActivity", "loadPost:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
-                Toast.makeText(MainActivity.this, "Failed to load post.",
+                Toast.makeText(MessageActivity.this, "Failed to load post.",
                         Toast.LENGTH_SHORT).show();
             }
         };

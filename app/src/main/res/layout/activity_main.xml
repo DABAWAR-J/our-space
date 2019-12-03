@@ -8,7 +8,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MessageActivity">
 
     <EditText
         android:layout_width="match_parent"
