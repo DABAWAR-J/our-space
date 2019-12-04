@@ -20,11 +20,11 @@ public class LocationActivity extends AppCompatActivity {
     private final long MIN_TIME = 1000; // 1 second
     private final long MIN_DIST = 5; // 5 meters
 
-    private double lat;
-    private double lng;
+    private double lat; //latitude
+    private double lng; //longitude
 
-    private String latText;
-    private String lngText;
+    private String latText; //latitude string
+    private String lngText; //longitude string
 
     public void trackLocation(){
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PackageManager.PERMISSION_GRANTED);
