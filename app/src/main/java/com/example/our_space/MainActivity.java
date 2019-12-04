@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Button login;
+
+    private LocationActivity locationActivity;
 
     FirebaseAuth auth;
     GoogleSignInClient mGoogleSignInClient;
@@ -61,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+        //Get Users Location
+        locationActivity = new LocationActivity();
+        locationActivity.trackLocation();
+
     }
 
     private void signIn() {
