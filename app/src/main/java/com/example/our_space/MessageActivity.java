@@ -6,9 +6,11 @@ import androidx.annotation.Nullable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +35,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_message);
         FirebaseApp.initializeApp(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -41,6 +43,12 @@ public class MessageActivity extends BaseActivity {
         messageField = findViewById(R.id.messageField);
         sendButton = findViewById(R.id.sendButton);
 
+        Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.locations));
+
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(myAdapter);
     }
 
     @Override
