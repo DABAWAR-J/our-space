@@ -10,6 +10,14 @@
     android:orientation="vertical"
     tools:context=".MessageActivity">
 
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:onClick="clickProfile"
+        android:text="Profile" />
+
     <Spinner
         android:id="@+id/spinner1"
         android:layout_width="409dp"

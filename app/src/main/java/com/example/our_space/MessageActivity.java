@@ -3,6 +3,7 @@ package com.example.our_space;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -167,6 +168,8 @@ public class MessageActivity extends BaseActivity {
 //                });
     }
 
-
+    public void clickProfile(View v) {
+        startActivity(new Intent(MessageActivity.this, ProfileActivity.class));
+    }
 
 }
