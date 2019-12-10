@@ -41,7 +41,6 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        FirebaseApp.initializeApp(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -146,7 +145,7 @@ public class MessageActivity extends BaseActivity {
         Map<String, Object> newMessageValues = newMessage.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/" + messageKey, newMessageValues);
+        childUpdates.put("/users/" + getUid() + "/" + messageKey, newMessageValues);
         childUpdates.put("/rooms/" + currentRoom + "/" + messageKey, newMessageValues);
 
         mDatabase.updateChildren(childUpdates);
