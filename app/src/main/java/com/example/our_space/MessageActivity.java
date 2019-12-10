@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,12 +26,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MessageActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
     private Button sendButton;
     private EditText messageField;
+    private Spinner mySpinner;
+    private String currentRoom;
+    private ChildEventListener postListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +48,14 @@ public class MessageActivity extends BaseActivity {
         messageField = findViewById(R.id.messageField);
         sendButton = findViewById(R.id.sendButton);
 
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+        mySpinner = findViewById(R.id.spinner1);
 
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.locations));
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
+
+        currentRoom = (String) mySpinner.getSelectedItem();
     }
 
     @Override
@@ -63,8 +70,30 @@ public class MessageActivity extends BaseActivity {
             }
         });
 
+        mySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
-        ChildEventListener postListener = new ChildEventListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String previousRoom = currentRoom;
+                currentRoom = (String) parent.getItemAtPosition(position);
+
+                if(!previousRoom.equals(currentRoom)) {
+                    LinearLayout linearLayout = findViewById(R.id.messageLinearLayout);
+                    linearLayout.removeAllViewsInLayout();
+                    mDatabase.child("rooms").child(previousRoom).getRef().removeEventListener(postListener);
+                    mDatabase.child("rooms").child(currentRoom).getRef().addChildEventListener(postListener);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Message message = Message.fromMap((HashMap<String, Object>)dataSnapshot.getValue());
@@ -98,14 +127,14 @@ public class MessageActivity extends BaseActivity {
             }
         };
 
-        mDatabase.child("users").getRef().addChildEventListener(postListener);
+        mDatabase.child("rooms").child(currentRoom).getRef().addChildEventListener(postListener);
     }
 
     public TextView createNewTextView() {
         TextView newMessageView = new TextView(this);
         newMessageView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        LinearLayout linearLayout = findViewById(R.id.mainLinearLayout);
+        LinearLayout linearLayout = findViewById(R.id.messageLinearLayout);
         linearLayout.addView(newMessageView);
         return newMessageView;
     }
@@ -113,21 +142,29 @@ public class MessageActivity extends BaseActivity {
     public void sendMessage(String message) {
         String messageKey = mDatabase.child("users").child(getUid()).push().getKey();
         String author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Message newMessage = new Message(getUid(), author, message);
-        mDatabase.child("users").child(messageKey).setValue(newMessage.toMap())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("basicWrite","Database call was successful");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("basicWrite", e.toString());
-                        Log.e("basicWrite","Database call failed");
-                    }
-                });
+        Message newMessage = new Message(getUid(), author, currentRoom, message);
+        Map<String, Object> newMessageValues = newMessage.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + messageKey, newMessageValues);
+        childUpdates.put("/rooms/" + currentRoom + "/" + messageKey, newMessageValues);
+
+        mDatabase.updateChildren(childUpdates);
+
+//        mDatabase.child("users").child(messageKey).setValue(newMessage.toMap())
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d("basicWrite","Database call was successful");
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.e("basicWrite", e.toString());
+//                        Log.e("basicWrite","Database call failed");
+//                    }
+//                });
     }
 
 
