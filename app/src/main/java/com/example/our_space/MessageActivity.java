@@ -150,21 +150,6 @@ public class MessageActivity extends BaseActivity {
         childUpdates.put("/rooms/" + currentRoom + "/" + messageKey, newMessageValues);
 
         mDatabase.updateChildren(childUpdates);
-
-//        mDatabase.child("users").child(messageKey).setValue(newMessage.toMap())
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("basicWrite","Database call was successful");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e("basicWrite", e.toString());
-//                        Log.e("basicWrite","Database call failed");
-//                    }
-//                });
     }
 
     public void clickProfile(View v) {
