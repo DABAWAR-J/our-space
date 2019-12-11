@@ -94,9 +94,10 @@
     <string name="custom_auth_signin_status_user">User ID: %s</string>
     <string name="custom_auth_signin_status_failed">Error: sign in failed</string>
     <string-array name="locations">
-        <item>DECKER HALL 347</item>
+        <item>CHOOSE ROOM</item>
+        <item>DECKER HALL 360</item>
         <item>DECKER HALL 351</item>
-        <item>KOONTZ OFFICE</item>
+        <item>DECKER LOUNGE</item>
     </string-array>
 
     <!--    <string name="default_web_client_id">359580704327-qbi2upkvkj7h6puvff7plibojuagb6sb.apps.googleusercontent.com</string>-->
