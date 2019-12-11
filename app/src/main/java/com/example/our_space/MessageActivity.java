@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -21,9 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +59,6 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        FirebaseApp.initializeApp(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -70,7 +67,7 @@ public class MessageActivity extends BaseActivity {
 
         mySpinner = findViewById(R.id.spinner1);
 
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.locations));
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.locations));
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
@@ -156,7 +153,7 @@ public class MessageActivity extends BaseActivity {
                     roomLng = 85.66634455;
                 }
                 if(((latText != "") && (lat - roomLat < 0.00005)&& (lng - roomLng < .00005))|| currentRoom.equals("CHOOSE ROOM")) {
-                    if (currentRoom.equals("CHOOSE ROOM")) {
+                  if (currentRoom.equals("CHOOSE ROOM")) {
                         messageField.setEnabled(false);
                     }
                 }else {
@@ -164,7 +161,7 @@ public class MessageActivity extends BaseActivity {
                 }
 
 
-                if(!previousRoom.equals(currentRoom)) {
+                if (!previousRoom.equals(currentRoom)) {
                     LinearLayout linearLayout = findViewById(R.id.messageLinearLayout);
                     linearLayout.removeAllViewsInLayout();
                     mDatabase.child("rooms").child(previousRoom).getRef().removeEventListener(postListener);
@@ -183,7 +180,7 @@ public class MessageActivity extends BaseActivity {
         postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Message message = Message.fromMap((HashMap<String, Object>)dataSnapshot.getValue());
+                Message message = Message.fromMap((HashMap<String, Object>) dataSnapshot.getValue());
                 TextView newMessageView = createNewTextView();
                 newMessageView.setText(message.body);
 
@@ -233,27 +230,14 @@ public class MessageActivity extends BaseActivity {
         Map<String, Object> newMessageValues = newMessage.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/" + messageKey, newMessageValues);
+        childUpdates.put("/users/" + getUid() + "/" + messageKey, newMessageValues);
         childUpdates.put("/rooms/" + currentRoom + "/" + messageKey, newMessageValues);
 
         mDatabase.updateChildren(childUpdates);
-
-//        mDatabase.child("users").child(messageKey).setValue(newMessage.toMap())
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("basicWrite","Database call was successful");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e("basicWrite", e.toString());
-//                        Log.e("basicWrite","Database call failed");
-//                    }
-//                });
     }
 
-
+    public void clickProfile(View v) {
+        startActivity(new Intent(MessageActivity.this, ProfileActivity.class));
+    }
 
 }

@@ -22,6 +22,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -40,9 +45,14 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    private DatabaseReference mDatabase;
+
     public GoogleSignInActivity() {
         super();
         FirebaseApp.initializeApp(this);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
 
@@ -97,9 +107,8 @@ public class GoogleSignInActivity extends BaseActivity implements
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.w("GoogleSignInActivity", "Account: " + account.getId());
                 firebaseAuthWithGoogle(account);
-                Intent intent = new Intent(this, MessageActivity.class);
-                startActivity(intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -184,8 +193,19 @@ public class GoogleSignInActivity extends BaseActivity implements
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
-            findViewById(R.id.signInButton).setVisibility(View.GONE);
-            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
+
+//            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/users/" + getUid() + "/email", user.getEmail());
+            childUpdates.put("/users/" + getUid() + "/username", user.getDisplayName());
+
+            mDatabase.updateChildren(childUpdates);
+
+//            findViewById(R.id.signInButton).setVisibility(View.GONE);
+//            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
+            Intent intent = new Intent(this, MessageActivity.class);
+            startActivity(intent);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
