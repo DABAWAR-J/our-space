@@ -84,7 +84,7 @@ public class MessageActivity extends BaseActivity implements
 
         mySpinner = findViewById(R.id.spinner1);
 
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.locations));
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.locations));
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
@@ -172,7 +172,7 @@ public class MessageActivity extends BaseActivity implements
                     roomLng = 85.66634455;
                 }
                 if(((latText != "") && (lat - roomLat < 0.00005)&& (lng - roomLng < .00005))|| currentRoom.equals("CHOOSE ROOM")) {
-                    if (currentRoom.equals("CHOOSE ROOM")) {
+                  if (currentRoom.equals("CHOOSE ROOM")) {
                         messageField.setEnabled(false);
                     }
                 }else {
@@ -180,7 +180,7 @@ public class MessageActivity extends BaseActivity implements
                 }
 
 
-                if(!previousRoom.equals(currentRoom)) {
+                if (!previousRoom.equals(currentRoom)) {
                     LinearLayout linearLayout = findViewById(R.id.messageLinearLayout);
                     linearLayout.removeAllViewsInLayout();
                     mDatabase.child("rooms").child(previousRoom).getRef().removeEventListener(postListener);
@@ -199,7 +199,7 @@ public class MessageActivity extends BaseActivity implements
         postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Message message = Message.fromMap((HashMap<String, Object>)dataSnapshot.getValue());
+                Message message = Message.fromMap((HashMap<String, Object>) dataSnapshot.getValue());
                 TextView newMessageView = createNewTextView();
                 newMessageView.setText(message.body);
 
@@ -255,7 +255,6 @@ public class MessageActivity extends BaseActivity implements
         mDatabase.updateChildren(childUpdates);
     }
 
-
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -264,6 +263,10 @@ public class MessageActivity extends BaseActivity implements
             Intent intent = new Intent(this, GoogleSignInActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void clickProfile(View v) {
+        startActivity(new Intent(MessageActivity.this, ProfileActivity.class));
     }
 
 }
