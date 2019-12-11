@@ -3,6 +3,7 @@ package com.example.our_space;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +16,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -28,9 +34,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends BaseActivity implements
+        View.OnClickListener{
 
     private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
     private Button sendButton;
     private Button logOutButton;
     private EditText messageField;
@@ -43,7 +52,16 @@ public class MessageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
         messageField = findViewById(R.id.messageField);
         sendButton = findViewById(R.id.sendButton);
@@ -70,6 +88,8 @@ public class MessageActivity extends BaseActivity {
                 messageField.setText("");
             }
         });
+
+        logOutButton.setOnClickListener(this);
 
         mySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
@@ -154,5 +174,14 @@ public class MessageActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.logOutButton) {
+            mAuth.signOut();
+            Intent intent = new Intent(this, GoogleSignInActivity.class);
+            startActivity(intent);
+        }
+    }
 
 }
