@@ -32,6 +32,7 @@ public class MessageActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
     private Button sendButton;
+    private Button logOutButton;
     private EditText messageField;
     private Spinner mySpinner;
     private String currentRoom;
@@ -46,6 +47,7 @@ public class MessageActivity extends BaseActivity {
 
         messageField = findViewById(R.id.messageField);
         sendButton = findViewById(R.id.sendButton);
+        logOutButton = findViewById(R.id.logOutButton);
 
         mySpinner = findViewById(R.id.spinner1);
 
