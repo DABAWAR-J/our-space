@@ -16,9 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +47,7 @@ public class MessageActivity extends BaseActivity {
 
         mySpinner = findViewById(R.id.spinner1);
 
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.locations));
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MessageActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.locations));
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
@@ -77,7 +74,7 @@ public class MessageActivity extends BaseActivity {
                 String previousRoom = currentRoom;
                 currentRoom = (String) parent.getItemAtPosition(position);
 
-                if(!previousRoom.equals(currentRoom)) {
+                if (!previousRoom.equals(currentRoom)) {
                     LinearLayout linearLayout = findViewById(R.id.messageLinearLayout);
                     linearLayout.removeAllViewsInLayout();
                     mDatabase.child("rooms").child(previousRoom).getRef().removeEventListener(postListener);
@@ -96,7 +93,7 @@ public class MessageActivity extends BaseActivity {
         postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Message message = Message.fromMap((HashMap<String, Object>)dataSnapshot.getValue());
+                Message message = Message.fromMap((HashMap<String, Object>) dataSnapshot.getValue());
                 TextView newMessageView = createNewTextView();
                 newMessageView.setText(message.body);
 
