@@ -153,7 +153,7 @@ public class MessageActivity extends BaseActivity {
                     roomLng = 85.66634455;
                 }
                 if(((latText != "") && (lat - roomLat < 0.00005)&& (lng - roomLng < .00005))|| currentRoom.equals("CHOOSE ROOM")) {
-                    if (currentRoom.equals("CHOOSE ROOM")) {
+                  if (currentRoom.equals("CHOOSE ROOM")) {
                         messageField.setEnabled(false);
                     }
                 }else {
