@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,19 +41,22 @@ public class ProfileActivity extends AppCompatActivity {
         final TextView emailText = (TextView) findViewById(R.id.emailValue);
         emailText.setText(firebaseAuth.getCurrentUser().getEmail());
         final TextView totalPosts = (TextView) findViewById(R.id.totalPostsValue);
-//        totalPosts.setText(database.child("users").child(firebaseAuth.getUid())..toString());
 
         database.child("users").child(firebaseAuth.getUid()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Get map of users in datasnapshot
+                        //Get map of messages in datasnapshot
                         totalPosts.setText(Long.toString(dataSnapshot.getChildrenCount()));
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        //handle databaseError
+                        // Getting Post failed, log a message
+                        Log.w("ProfileActivity", "loadProfile:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        Toast.makeText(ProfileActivity.this, "Failed to load profile data.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
