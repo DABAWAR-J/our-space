@@ -22,6 +22,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -40,9 +45,14 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    private DatabaseReference mDatabase;
+
     public GoogleSignInActivity() {
         super();
         FirebaseApp.initializeApp(this);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
 
@@ -182,6 +192,15 @@ public class GoogleSignInActivity extends BaseActivity implements
         if (user != null) {
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+
+
+//            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/users/" + getUid() + "/email", user.getEmail());
+            childUpdates.put("/users/" + getUid() + "/username", user.getDisplayName());
+
+            mDatabase.updateChildren(childUpdates);
 
 //            findViewById(R.id.signInButton).setVisibility(View.GONE);
 //            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
