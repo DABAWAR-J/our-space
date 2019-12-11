@@ -193,7 +193,6 @@ public class GoogleSignInActivity extends BaseActivity implements
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
-
 //            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
             Map<String, Object> childUpdates = new HashMap<>();
